@@ -1,8 +1,14 @@
 import express from "express";
-import { createJob, getJobs } from "../application/features/jobs";
+import { createJob, getJobs,getOneJob } from "../application/features/jobs";
 
 const jobsRouter = express.Router();
 
-jobsRouter.route("/").get(getJobs).post(createJob);
+
+jobsRouter.route("/").post(createJob).get(getJobs)
+
+jobsRouter.route("/:id").get(getOneJob)
+
 
 export default jobsRouter;
+
+
