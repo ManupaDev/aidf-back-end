@@ -1,21 +1,9 @@
-import { NextFunction, Request, Response } from "express";
-   const jobs = [
-      {
-        _id: "xyz",
-        title: "Intern - Software Engineer",
-        type: "Full-time",
-        location: "Remote",
-      },
-      {
-        _id: "abc",
-        title: "Software Engineer",
-        type: "Full-time",
-        location: "Remote",
-      },
-    ];
+import { Request, Response } from "express";
+import Job from "../../persistance/entities/jobs";
 
-  export const getJobs = async (req: Request, res: Response) => {
+export const getJobs = async (req: Request, res: Response) => {
   try {
+    const jobs = await Job.find();
     return res.status(200).json(jobs);
   } catch (error) {
     return res.status(500).send();
@@ -24,26 +12,21 @@ import { NextFunction, Request, Response } from "express";
 
 export const createJob = async (req: Request, res: Response) => {
   try {
-    console.log(req.body)
-    jobs.push(req.body)
-    return res.status(200).json(jobs)
+    const job = req.body;
+    await Job.create(job);
+    return res.status(200).send();
   } catch (error) {
     return res.status(500).send();
   }
 };
 
-export const getOneJob = async (req: Request, res: Response) => {
+export const getJobById = async (req: Request, res: Response) => {
   try {
-    console.log(req.params.id)
-
-    let newJob = null
-    jobs.map(jb=>{
-      if(jb._id == req.params.id){
-          newJob = jb
-      }
-    })
-    return res.status(200).json(newJob);
+    const job = Job.findById(req.params.id);
+    return res.status(200).json(job);
   } catch (error) {
+    console.log(error);
+
     return res.status(500).send();
   }
 };
