@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import JobApplication from "../../persistance/entities/JobApplication";
+import NotFoundError from "../../domain/errors/not-found-error";
 
 export const createJobApplication = async (
   req: Request,
@@ -43,6 +44,9 @@ export const getJobApplicationById = async (
   try {
     const { id } = req.params;
     const jobApplication = await JobApplication.findById(id);
+    if (jobApplication === null) {
+      throw new NotFoundError("Job Application not found");
+    }
     return res.status(200).json(jobApplication);
   } catch (error) {
     next(error);
