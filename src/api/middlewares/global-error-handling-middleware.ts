@@ -14,6 +14,8 @@ const GlobalErrorHandlerMiddleware = (
     case "ForbiddenError":
       return res.status(403).json({ message: error.message });
     case "Error":
+      console.log(error);
+      
       return res.status(401).json({ message: error.message });
     default:
       return res.status(500).send();
