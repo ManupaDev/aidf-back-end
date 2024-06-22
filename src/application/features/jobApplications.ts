@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import JobApplication from "../../persistance/entities/JobApplication";
 import NotFoundError from "../../domain/errors/not-found-error";
+import { generateRating } from "./rating";
 
 export const createJobApplication = async (
   req: Request,
@@ -9,7 +10,8 @@ export const createJobApplication = async (
 ) => {
   try {
     const jobApplication = req.body;
-    await JobApplication.create(jobApplication);
+    const createdJobApplication= await JobApplication.create(jobApplication);
+    generateRating(createdJobApplication._id)
     return res.status(201).send();
   } catch (error) {
     next(error);
